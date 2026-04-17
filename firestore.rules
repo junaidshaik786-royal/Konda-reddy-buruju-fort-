@@ -50,9 +50,11 @@ service cloud.firestore {
     }
 
     function isValidScore(data) {
-      return data.keys().hasOnly(['userId', 'score', 'timestamp']) &&
-             data.userId == request.auth.uid &&
+      return data.keys().hasOnly(['uid', 'name', 'score', 'level', 'timestamp']) &&
+             (!isAuthenticated() ? data.uid == 'guest' : (data.uid == request.auth.uid || data.uid == 'guest')) &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 50 &&
              data.score is number && data.score >= 0 &&
+             data.level is number && data.level > 0 &&
              data.timestamp is timestamp;
     }
 
@@ -76,11 +78,11 @@ service cloud.firestore {
     }
 
     match /scores/{scoreId} {
-      // Anyone authenticated can view the global leaderboard
-      allow read: if isAuthenticated();
+      // Public leaderboard can be read by anyone so game menu works for guests
+      allow read: if true;
       
-      // Players can only create scores for themselves
-      allow create: if isAuthenticated() && isValidScore(request.resource.data);
+      // Players can only create valid scores
+      allow create: if isValidScore(request.resource.data);
       
       // Scores are immutable
       allow update, delete: if isAdmin();

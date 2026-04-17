@@ -2,7 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import { MainScene } from './MainScene';
 
-export const PhaserGame: React.FC = () => {
+interface PhaserGameProps {
+  onGameOver?: (data: { score: number; level: number }) => void;
+}
+
+export const PhaserGame: React.FC<PhaserGameProps> = ({ onGameOver }) => {
   const gameContainer = useRef<HTMLDivElement>(null);
   const gameInstance = useRef<Phaser.Game | null>(null);
 
@@ -18,7 +22,7 @@ export const PhaserGame: React.FC = () => {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { x: 0, y: 0 },
+          gravity: { x: 0, y: 800 },
           debug: false
         }
       },
@@ -29,12 +33,18 @@ export const PhaserGame: React.FC = () => {
       },
       render: {
         antialias: true,
-        pixelArt: false, // Set to false for high-res visuals
+        pixelArt: false,
         roundPixels: true
       }
     };
 
-    gameInstance.current = new Phaser.Game(config);
+    const game = new Phaser.Game(config);
+    gameInstance.current = game;
+
+    // Listen for events from Phaser
+    game.events.on('GAME_OVER', (data: any) => {
+      if (onGameOver) onGameOver(data);
+    });
 
     return () => {
       if (gameInstance.current) {
@@ -42,7 +52,7 @@ export const PhaserGame: React.FC = () => {
         gameInstance.current = null;
       }
     };
-  }, []);
+  }, [onGameOver]);
 
   return (
     <div 

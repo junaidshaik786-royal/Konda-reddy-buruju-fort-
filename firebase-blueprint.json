@@ -19,11 +19,13 @@
       "description": "A single game completion record.",
       "type": "object",
       "properties": {
-        "userId": { "type": "string", "description": "UID of the player" },
+        "uid": { "type": "string", "description": "UID of the player or 'guest'" },
+        "name": { "type": "string", "description": "Display name of the player" },
         "score": { "type": "number", "description": "Points earned" },
+        "level": { "type": "number", "description": "Floor reached" },
         "timestamp": { "type": "string", "format": "date-time", "description": "When the score was achieved" }
       },
-      "required": ["userId", "score", "timestamp"]
+      "required": ["uid", "name", "score", "level", "timestamp"]
     }
   },
   "firestore": {
