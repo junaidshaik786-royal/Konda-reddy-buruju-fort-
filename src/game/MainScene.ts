@@ -25,26 +25,83 @@ export class MainScene extends Phaser.Scene {
   }
 
   preload() {
-    // High-quality placeholders
-    this.load.image('ground', 'https://picsum.photos/seed/stone-floor/400/32');
-    this.load.image('player', 'https://picsum.photos/seed/warrior-icon/32/32');
-    this.load.image('relic', 'https://picsum.photos/seed/gold-crown/24/24');
-    this.load.image('trap', 'https://picsum.photos/seed/fire-trap/32/32');
-    this.load.image('portal', 'https://picsum.photos/seed/magic-gate/48/64');
+    // Generate Textures Procedurally (Ensures 100% loaded instantly, zero CORS issues)
+    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
     
-    // Cinematic Audio Assets
-    this.load.audio('collect', ['https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3']); // Crystal shimmer
-    this.load.audio('death', ['https://assets.mixkit.co/active_storage/sfx/2591/2591-preview.mp3']); // Dark impact
-    this.load.audio('ambient', ['https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3']); // Dark cinematic
+    // Ground Texture
+    graphics.fillStyle(0x333333, 1);
+    graphics.lineStyle(2, 0x555555, 1);
+    graphics.fillRect(0, 0, 400, 32);
+    graphics.strokeRect(0, 0, 400, 32);
+    graphics.generateTexture('ground', 400, 32);
+    graphics.clear();
+
+    // Player Texture
+    graphics.fillStyle(0xffffff, 1);
+    graphics.fillCircle(16, 16, 16);
+    graphics.generateTexture('player', 32, 32);
+    graphics.clear();
+
+    // Relic (Gold) Texture
+    graphics.fillStyle(0xffd700, 1);
+    graphics.beginPath();
+    graphics.moveTo(12, 0);
+    graphics.lineTo(24, 12);
+    graphics.lineTo(12, 24);
+    graphics.lineTo(0, 12);
+    graphics.closePath();
+    graphics.fillPath();
+    graphics.generateTexture('relic', 24, 24);
+    graphics.clear();
+
+    // Trap Texture
+    graphics.fillStyle(0x8b0000, 1);
+    graphics.fillRect(0, 0, 32, 32);
+    graphics.fillStyle(0xff0000, 1);
+    graphics.fillTriangle(16, 0, 32, 32, 0, 32);
+    graphics.generateTexture('trap', 32, 32);
+    graphics.clear();
+
+    // Portal Texture
+    graphics.fillStyle(0x00ffff, 0.6);
+    graphics.fillEllipse(24, 32, 48, 64);
+    graphics.generateTexture('portal', 48, 64);
+    graphics.clear();
+  }
+
+  // Helper for synthetic audio
+  private playSynthSound(type: 'collect' | 'death') {
+    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    if (type === 'collect') {
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+      gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.2);
+    } else {
+      oscillator.type = 'square';
+      oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.3);
+      gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.3);
+    }
   }
 
   create() {
     const { width, height } = this.scale;
 
-    // Play Background Ambient
-    if (!this.sound.get('ambient')) {
-      this.sound.play('ambient', { loop: true, volume: 0.3 });
-    }
+    // Removed ambient sound since it relies on external URL
+    // We will just use SFX for simplicity!
 
     // Static Platforms (Procedural level design based on level number)
     this.platforms = this.physics.add.staticGroup();
@@ -158,7 +215,7 @@ export class MainScene extends Phaser.Scene {
     relic.disableBody(true, true);
     this.score += 100;
     this.scoreText.setText(`GOLD: ${this.score}`);
-    this.sound.play('collect');
+    this.playSynthSound('collect');
     
     // Sparkle effect
     const gem = this.add.circle(relic.x, relic.y, 10, 0xd4af37);
@@ -175,7 +232,7 @@ export class MainScene extends Phaser.Scene {
     this.isGameOver = true;
     this.physics.pause();
     player.setTint(0xff0000);
-    this.sound.play('death');
+    this.playSynthSound('death');
     
     this.cameras.main.shake(500, 0.01);
     
@@ -193,7 +250,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private reachPortal(player: any, portal: any) {
-    this.sound.play('collect');
+    this.playSynthSound('collect');
     this.level += 1;
     this.scene.start('MainScene', { level: this.level, score: this.score });
   }
