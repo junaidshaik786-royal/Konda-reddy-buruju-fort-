@@ -144,7 +144,7 @@ export default function App() {
       <div className="min-h-screen bg-fort-bg flex flex-col items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-noble-red/5 animate-pulse" />
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative z-10 text-center">
-          <img src="/icon.svg" className="w-24 h-24 mx-auto mb-8 gold-glow animate-bounce" alt="Icon" />
+          <img src={`${import.meta.env.BASE_URL}icon.svg`} className="w-24 h-24 mx-auto mb-8 gold-glow animate-bounce" alt="Icon" />
           <div className="text-royal-gold font-royal tracking-[0.5em] text-sm">Synchronizing Chronicles...</div>
         </motion.div>
       </div>
@@ -238,7 +238,7 @@ export default function App() {
               ) : user ? (
                 <div className="space-y-8">
                   <div className="relative inline-block pb-4">
-                    <img src={user.photoURL || '/icon.svg'} alt="Avatar" className="w-28 h-28 border border-royal-gold/40 p-2 grayscale" />
+                    <img src={user.photoURL || `${import.meta.env.BASE_URL}icon.svg`} alt="Avatar" className="w-28 h-28 border border-royal-gold/40 p-2 grayscale" />
                     <div className="absolute -bottom-2 right-1/2 translate-x-1/2 glass-panel p-2"><Shield className="w-5 h-5 gold-glow" /></div>
                   </div>
                   <h1 className="text-4xl font-royal gold-glow tracking-[0.2em]">{user.displayName}</h1>
@@ -256,7 +256,7 @@ export default function App() {
                 </div>
               ) : (
                 <div className="relative">
-                  <img src="/icon.svg" alt="Icon" className="w-40 h-40 mx-auto mb-10 drop-shadow-[0_0_25px_#D4AF37] animate-pulse" />
+                  <img src={`${import.meta.env.BASE_URL}icon.svg`} alt="Icon" className="w-40 h-40 mx-auto mb-10 drop-shadow-[0_0_25px_#D4AF37] animate-pulse" />
                   <h1 className="text-5xl md:text-6xl font-royal gold-glow mb-4 tracking-[0.3em]">Legend</h1>
                   <p className="text-royal-gold/40 tracking-[0.6em] font-light text-xs mb-10 underline underline-offset-8">THE BURUJU ESCAPE</p>
                   
