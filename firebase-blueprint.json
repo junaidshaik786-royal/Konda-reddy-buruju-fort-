@@ -1,0 +1,39 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User account information and career stats.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "Display name" },
+        "photoURL": { "type": "string", "description": "Avatar URL" },
+        "email": { "type": "string", "description": "Contact email" },
+        "topScore": { "type": "number", "description": "Highest score achieved" },
+        "lastLogin": { "type": "string", "format": "date-time", "description": "Last login timestamp" }
+      },
+      "required": ["uid", "displayName"]
+    },
+    "GameScore": {
+      "title": "Game Score",
+      "description": "A single game completion record.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "UID of the player" },
+        "score": { "type": "number", "description": "Points earned" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "When the score was achieved" }
+      },
+      "required": ["userId", "score", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Public and private user profile data."
+    },
+    "/scores/{scoreId}": {
+      "schema": "GameScore",
+      "description": "Global leaderboard entries."
+    }
+  }
+}

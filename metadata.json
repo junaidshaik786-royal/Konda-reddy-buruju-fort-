@@ -1,0 +1,9 @@
+{
+  "name": "Kurnool Legend: The Buruju Escape",
+  "description": "An epic escape-style adventure set in the historic Konda Reddy Buruju. Features real-time multiplayer duels and Royal Vijayanagara aesthetics.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": []
+}

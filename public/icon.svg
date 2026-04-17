@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Deep Crimson Background -->
+  <rect width="512" height="512" fill="#8B0000" rx="100"/>
+  
+  <!-- Outer Circular Bastion Silhouette -->
+  <path d="M256 120 C 180 120, 120 180, 120 256 C 120 332, 180 392, 256 392 C 332 392, 392 332, 392 256 C 392 180, 332 120, 256 120 Z" fill="#D4AF37" opacity="0.3"/>
+  
+  <!-- The Buruju (Konda Reddy Fort) Main Structure -->
+  <g fill="#D4AF37">
+    <!-- Base Level -->
+    <path d="M160 360 Q 256 380, 352 360 L 352 300 Q 256 320, 160 300 Z"/>
+    <!-- Middle Level -->
+    <path d="M180 300 Q 256 315, 332 300 L 332 250 Q 256 265, 180 250 Z"/>
+    <!-- Top Level -->
+    <path d="M200 250 Q 256 260, 312 250 L 312 210 Q 256 220, 200 210 Z"/>
+    <!-- Central Pillar/Watchtower -->
+    <rect x="240" y="150" width="32" height="65"/>
+    <path d="M230 155 L 256 130 L 282 155 Z"/>
+    
+    <!-- Tungabhadra Waves Symbol at Bottom -->
+    <path d="M180 410 Q 210 390, 256 410 Q 302 430, 332 410" fill="none" stroke="#D4AF37" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Royal Accents -->
+  <circle cx="256" cy="256" r="230" fill="none" stroke="#D4AF37" stroke-width="4" stroke-dasharray="20 10"/>
+</svg>
